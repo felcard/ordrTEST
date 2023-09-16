@@ -36946,7 +36946,7 @@ ${frame.code}`;
     '9xmpe': [
       function (require, module, exports) {
         /**
-         * React Router DOM v6.15.0
+         * React Router DOM v6.16.0
          *
          * Copyright (c) Remix Software Inc.
          *
@@ -37549,7 +37549,7 @@ ${frame.code}`;
             // Hey you!  If you change this, please change the corresponding logic in
             // serializeErrors in react-router-dom/server.tsx :)
             if (val && val.__type === 'RouteErrorResponse')
-              serialized[key] = new (0, _router.ErrorResponse)(
+              serialized[key] = new (0, _router.UNSAFE_ErrorResponseImpl)(
                 val.status,
                 val.statusText,
                 val.data,
@@ -38252,6 +38252,7 @@ ${frame.code}`;
           return FetcherForm;
         }
         let fetcherId = 0;
+        // TODO: (v7) Change the useFetcher generic default from `any` to `unknown`
         /**
          * Interacts with route loaders and actions without causing a navigation. Great
          * for any interaction that stays on the same page.
@@ -38520,7 +38521,7 @@ ${frame.code}`;
     dbWyW: [
       function (require, module, exports) {
         /**
-         * React Router v6.15.0
+         * React Router v6.16.0
          *
          * Copyright (c) Remix Software Inc.
          *
@@ -39503,19 +39504,9 @@ ${frame.code}`;
           );
           return _react.useMemo(
             () =>
-              matches.map((match) => {
-                let { pathname, params } = match;
-                // Note: This structure matches that created by createUseMatchesMatch
-                // in the @remix-run/router , so if you change this please also change
-                // that :)  Eventually we'll DRY this up
-                return {
-                  id: match.route.id,
-                  pathname,
-                  params,
-                  data: loaderData[match.route.id],
-                  handle: match.route.handle,
-                };
-              }),
+              matches.map((m) =>
+                (0, _router.UNSAFE_convertRouteMatchToUiMatch)(m, loaderData)
+              ),
             [matches, loaderData]
           );
         }
@@ -40259,7 +40250,7 @@ ${frame.code}`;
     '5ncDG': [
       function (require, module, exports) {
         /**
-         * @remix-run/router v1.8.0
+         * @remix-run/router v1.9.0
          *
          * Copyright (c) Remix Software Inc.
          *
@@ -40276,7 +40267,6 @@ ${frame.code}`;
           () => AbortedDeferredError
         );
         parcelHelpers.export(exports, 'Action', () => Action);
-        parcelHelpers.export(exports, 'ErrorResponse', () => ErrorResponse);
         parcelHelpers.export(exports, 'IDLE_BLOCKER', () => IDLE_BLOCKER);
         parcelHelpers.export(exports, 'IDLE_FETCHER', () => IDLE_FETCHER);
         parcelHelpers.export(exports, 'IDLE_NAVIGATION', () => IDLE_NAVIGATION);
@@ -40289,6 +40279,16 @@ ${frame.code}`;
           exports,
           'UNSAFE_DeferredData',
           () => DeferredData
+        );
+        parcelHelpers.export(
+          exports,
+          'UNSAFE_ErrorResponseImpl',
+          () => ErrorResponseImpl
+        );
+        parcelHelpers.export(
+          exports,
+          'UNSAFE_convertRouteMatchToUiMatch',
+          () => convertRouteMatchToUiMatch
         );
         parcelHelpers.export(
           exports,
@@ -40610,7 +40610,7 @@ ${frame.code}`;
             try {
               // Welcome to debugging history!
               //
-              // This error is thrown as a convenience so you can more easily
+              // This error is thrown as a convenience, so you can more easily
               // find the source for a warning that appears in the console by
               // enabling "pause on exceptions" in your JavaScript debugger.
               throw new Error(message);
@@ -40844,7 +40844,7 @@ ${frame.code}`;
         function isIndexRoute(route) {
           return route.index === true;
         }
-        // Walk the route tree generating unique IDs where necessary so we are working
+        // Walk the route tree generating unique IDs where necessary, so we are working
         // solely with AgnosticDataRouteObject's within the Router
         function convertRoutesToDataRoutes(
           routes,
@@ -40924,6 +40924,16 @@ ${frame.code}`;
             );
           return matches;
         }
+        function convertRouteMatchToUiMatch(match, loaderData) {
+          let { route, pathname, params } = match;
+          return {
+            id: route.id,
+            pathname,
+            params,
+            data: loaderData[route.id],
+            handle: route.handle,
+          };
+        }
         function flattenRoutes(routes, branches, parentsMeta, parentPath) {
           if (branches === void 0) branches = [];
           if (parentsMeta === void 0) parentsMeta = [];
@@ -40951,7 +40961,7 @@ ${frame.code}`;
             }
             let path = joinPaths([parentPath, meta.relativePath]);
             let routesMeta = parentsMeta.concat(meta);
-            // Add the children before adding this route to the array so we traverse the
+            // Add the children before adding this route to the array, so we traverse the
             // route tree depth-first and child routes appear before their parents in
             // the "flattened" version.
             if (route.children && route.children.length > 0) {
@@ -41015,10 +41025,10 @@ ${frame.code}`;
           let restExploded = explodeOptionalSegments(rest.join('/'));
           let result = [];
           // All child paths with the prefix.  Do this for all children before the
-          // optional version for all children so we get consistent ordering where the
+          // optional version for all children, so we get consistent ordering where the
           // parent optional aspect is preferred as required.  Otherwise, we can get
           // child sections interspersed where deeper optional segments are higher than
-          // parent optional segments, where for example, /:two would explodes _earlier_
+          // parent optional segments, where for example, /:two would explode _earlier_
           // then /:one.  By always including the parent as required _for all children_
           // first, we avoid this issue
           result.push(
@@ -41026,7 +41036,7 @@ ${frame.code}`;
               subpath === '' ? required : [required, subpath].join('/')
             )
           );
-          // Then if this is an optional value, add all child versions without
+          // Then, if this is an optional value, add all child versions without
           if (isOptional) result.push(...restExploded);
           // for absolute paths, ensure `/` instead of empty segment
           return result.map((exploded) =>
@@ -41254,7 +41264,7 @@ ${frame.code}`;
             regexpSource += '\\/*$';
           else if (path !== '' && path !== '/')
             // If our path is non-empty and contains anything beyond an initial slash,
-            // then we have _some_ form of path in our regex so we should expect to
+            // then we have _some_ form of path in our regex, so we should expect to
             // match only if we find the end of this path segment.  Look for an optional
             // non-captured trailing slash (to match a portion of the URL) or the end
             // of the path (if we've matched to the end).  We used to do this with a
@@ -41709,7 +41719,7 @@ ${frame.code}`;
         /**
          * @private
          * Utility class we use to hold auto-unwrapped 4xx/5xx Response bodies
-         */ class ErrorResponse {
+         */ class ErrorResponseImpl {
           constructor(status, statusText, data, internal) {
             if (internal === void 0) internal = false;
             this.status = status;
@@ -42807,8 +42817,7 @@ ${frame.code}`;
                   fetchers: new Map(state.fetchers),
                 });
                 return startRedirectNavigation(state, actionResult, {
-                  submission,
-                  isFetchActionRedirect: true,
+                  fetcherSubmission: submission,
                 });
               }
             }
@@ -43085,22 +43094,15 @@ ${frame.code}`;
            * actually touch history until we've processed redirects, so we just use
            * the history action from the original navigation (PUSH or REPLACE).
            */ async function startRedirectNavigation(state, redirect, _temp) {
-            let { submission, replace, isFetchActionRedirect } =
+            let { submission, fetcherSubmission, replace } =
               _temp === void 0 ? {} : _temp;
             if (redirect.revalidate) isRevalidationRequired = true;
             let redirectLocation = createLocation(
               state.location,
               redirect.location,
-              _extends(
-                {
-                  _isRedirect: true,
-                },
-                isFetchActionRedirect
-                  ? {
-                      _isFetchActionRedirect: true,
-                    }
-                  : {}
-              )
+              {
+                _isRedirect: true,
+              }
             );
             invariant(
               redirectLocation,
@@ -43130,11 +43132,19 @@ ${frame.code}`;
               replace === true ? Action.Replace : Action.Push;
             // Use the incoming submission if provided, fallback on the active one in
             // state.navigation
-            let activeSubmission =
-              submission || getSubmissionFromNavigation(state.navigation);
+            let { formMethod, formAction, formEncType } = state.navigation;
+            if (
+              !submission &&
+              !fetcherSubmission &&
+              formMethod &&
+              formAction &&
+              formEncType
+            )
+              submission = getSubmissionFromNavigation(state.navigation);
             // If this was a 307/308 submission we want to preserve the HTTP method and
             // re-submit the GET/POST/PUT/PATCH/DELETE as a submission navigation to the
             // redirected location
+            let activeSubmission = submission || fetcherSubmission;
             if (
               redirectPreserveMethodStatusCodes.has(redirect.status) &&
               activeSubmission &&
@@ -43147,23 +43157,17 @@ ${frame.code}`;
                 // Preserve this flag across redirects
                 preventScrollReset: pendingPreventScrollReset,
               });
-            else if (isFetchActionRedirect)
-              // For a fetch action redirect, we kick off a new loading navigation
-              // without the fetcher submission, but we send it along for shouldRevalidate
-              await startNavigation(redirectHistoryAction, redirectLocation, {
-                overrideNavigation: getLoadingNavigation(redirectLocation),
-                fetcherSubmission: activeSubmission,
-                // Preserve this flag across redirects
-                preventScrollReset: pendingPreventScrollReset,
-              });
             else {
-              // If we have a submission, we will preserve it through the redirect navigation
+              // If we have a navigation submission, we will preserve it through the
+              // redirect navigation
               let overrideNavigation = getLoadingNavigation(
                 redirectLocation,
-                activeSubmission
+                submission
               );
               await startNavigation(redirectHistoryAction, redirectLocation, {
                 overrideNavigation,
+                // Send fetcher submissions through for shouldRevalidate
+                fetcherSubmission,
                 // Preserve this flag across redirects
                 preventScrollReset: pendingPreventScrollReset,
               });
@@ -43435,7 +43439,9 @@ ${frame.code}`;
             if (getScrollRestorationKey) {
               let key = getScrollRestorationKey(
                 location,
-                matches.map((m) => createUseMatchesMatch(m, state.loaderData))
+                matches.map((m) =>
+                  convertRouteMatchToUiMatch(m, state.loaderData)
+                )
               );
               return key || location.key;
             }
@@ -43776,7 +43782,13 @@ ${frame.code}`;
               );
               if (request.signal.aborted) {
                 let method = isRouteRequest ? 'queryRoute' : 'query';
-                throw new Error(method + '() call aborted');
+                throw new Error(
+                  method +
+                    '() call aborted: ' +
+                    request.method +
+                    ' ' +
+                    request.url
+                );
               }
             }
             if (isRedirectResult(result))
@@ -43950,7 +43962,13 @@ ${frame.code}`;
             ]);
             if (request.signal.aborted) {
               let method = isRouteRequest ? 'queryRoute' : 'query';
-              throw new Error(method + '() call aborted');
+              throw new Error(
+                method +
+                  '() call aborted: ' +
+                  request.method +
+                  ' ' +
+                  request.url
+              );
             }
             // Process and commit output from loaders
             let activeDeferreds = new Map();
@@ -44488,14 +44506,21 @@ ${frame.code}`;
             if (match.route.lazy) {
               if (handler) {
                 // Run statically defined handler in parallel with lazy()
+                let handlerError;
                 let values = await Promise.all([
-                  runHandler(handler),
+                  // If the handler throws, don't let it immediately bubble out,
+                  // since we need to let the lazy() execution finish so we know if this
+                  // route has a boundary that can handle the error
+                  runHandler(handler).catch((e) => {
+                    handlerError = e;
+                  }),
                   loadLazyRouteModule(
                     match.route,
                     mapRouteProperties,
                     manifest
                   ),
                 ]);
+                if (handlerError) throw handlerError;
                 result = values[0];
               } else {
                 // Load lazy route module, then run any returned handler
@@ -44622,7 +44647,7 @@ ${frame.code}`;
             if (resultType === ResultType.error)
               return {
                 type: resultType,
-                error: new ErrorResponse(status, result.statusText, data),
+                error: new ErrorResponseImpl(status, result.statusText, data),
                 headers: result.headers,
               };
             return {
@@ -44935,7 +44960,7 @@ ${frame.code}`;
               errorMessage =
                 'Invalid request method "' + method.toUpperCase() + '"';
           }
-          return new ErrorResponse(
+          return new ErrorResponseImpl(
             status || 500,
             statusText,
             new Error(errorMessage),
@@ -45094,18 +45119,6 @@ ${frame.code}`;
             .getAll('index')
             .some((v) => v === '');
         }
-        // Note: This should match the format exported by useMatches, so if you change
-        // this please also change that :)  Eventually we'll DRY this up
-        function createUseMatchesMatch(match, loaderData) {
-          let { route, pathname, params } = match;
-          return {
-            id: route.id,
-            pathname,
-            params,
-            data: loaderData[route.id],
-            handle: route.handle,
-          };
-        }
         function getTargetMatch(matches, location) {
           let search =
             typeof location === 'string'
@@ -45205,7 +45218,6 @@ ${frame.code}`;
               json: submission.json,
               text: submission.text,
               data,
-              ' _hasFetcherDoneAnything ': true,
             };
             return fetcher;
           } else {
@@ -45218,7 +45230,6 @@ ${frame.code}`;
               json: undefined,
               text: undefined,
               data,
-              ' _hasFetcherDoneAnything ': true,
             };
             return fetcher;
           }
@@ -45233,7 +45244,6 @@ ${frame.code}`;
             json: submission.json,
             text: submission.text,
             data: existingFetcher ? existingFetcher.data : undefined,
-            ' _hasFetcherDoneAnything ': true,
           };
           return fetcher;
         }
@@ -45247,7 +45257,6 @@ ${frame.code}`;
             json: undefined,
             text: undefined,
             data,
-            ' _hasFetcherDoneAnything ': true,
           };
           return fetcher;
         }
@@ -45309,7 +45318,7 @@ ${frame.code}`;
           var _react = require('react');
           var _reactDefault = parcelHelpers.interopDefault(_react);
           var _reactRouterDom = require('react-router-dom');
-          var _pages = require('src/pages');
+          var _pages = require('../pages');
           const router = (0, _reactRouterDom.createBrowserRouter)([
             {
               path: '/',
@@ -45368,87 +45377,10 @@ ${frame.code}`;
         'react/jsx-dev-runtime': 'iTorj',
         react: '21dqq',
         'react-router-dom': '9xmpe',
-        'src/pages': '9mZX6',
         '@parcel/transformer-js/src/esmodule-helpers.js': 'gkKU3',
         '@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js':
           'km3Ru',
-      },
-    ],
-    '9mZX6': [
-      function (require, module, exports) {
-        var parcelHelpers = require('@parcel/transformer-js/src/esmodule-helpers.js');
-        parcelHelpers.defineInteropFlag(exports);
-        var _landing = require('./Landing');
-        parcelHelpers.exportAll(_landing, exports);
-        var _menu = require('./Menu');
-        parcelHelpers.exportAll(_menu, exports);
-        var _kitchen = require('./Kitchen');
-        parcelHelpers.exportAll(_kitchen, exports);
-        var _loading = require('./Loading');
-        parcelHelpers.exportAll(_loading, exports);
-      },
-      {
-        './Landing': '8gD3a',
-        './Menu': 'lEQPh',
-        './Kitchen': 'l7054',
-        './Loading': '6M9JG',
-        '@parcel/transformer-js/src/esmodule-helpers.js': 'gkKU3',
-      },
-    ],
-    '8gD3a': [
-      function (require, module, exports) {
-        var $parcel$ReactRefreshHelpers$2521 = require('@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js');
-        var prevRefreshReg = window.$RefreshReg$;
-        var prevRefreshSig = window.$RefreshSig$;
-        $parcel$ReactRefreshHelpers$2521.prelude(module);
-
-        try {
-          var parcelHelpers = require('@parcel/transformer-js/src/esmodule-helpers.js');
-          parcelHelpers.defineInteropFlag(exports);
-          parcelHelpers.export(exports, 'LandingPage', () => LandingPage);
-          var _jsxDevRuntime = require('react/jsx-dev-runtime');
-          var _react = require('react');
-          var _reactDefault = parcelHelpers.interopDefault(_react);
-          const LandingPage = () => {
-            return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(
-              (0, _jsxDevRuntime.Fragment),
-              {
-                children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(
-                  'h1',
-                  {
-                    className: 'text-2xl font-bold underline text-blue-500',
-                    children: 'Hello world!',
-                  },
-                  void 0,
-                  false,
-                  {
-                    fileName: 'app/src/pages/Landing/index.tsx',
-                    lineNumber: 6,
-                    columnNumber: 7,
-                  },
-                  undefined
-                ),
-              },
-              void 0,
-              false
-            );
-          };
-          _c = LandingPage;
-          var _c;
-          $RefreshReg$(_c, 'LandingPage');
-
-          $parcel$ReactRefreshHelpers$2521.postlude(module);
-        } finally {
-          window.$RefreshReg$ = prevRefreshReg;
-          window.$RefreshSig$ = prevRefreshSig;
-        }
-      },
-      {
-        'react/jsx-dev-runtime': 'iTorj',
-        react: '21dqq',
-        '@parcel/transformer-js/src/esmodule-helpers.js': 'gkKU3',
-        '@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js':
-          'km3Ru',
+        '../pages': '9mZX6',
       },
     ],
     km3Ru: [
@@ -46127,6 +46059,83 @@ ${frame.code}`;
       },
       {},
     ],
+    '9mZX6': [
+      function (require, module, exports) {
+        var parcelHelpers = require('@parcel/transformer-js/src/esmodule-helpers.js');
+        parcelHelpers.defineInteropFlag(exports);
+        var _landing = require('./Landing');
+        parcelHelpers.exportAll(_landing, exports);
+        var _menu = require('./Menu');
+        parcelHelpers.exportAll(_menu, exports);
+        var _kitchen = require('./Kitchen');
+        parcelHelpers.exportAll(_kitchen, exports);
+        var _loading = require('./Loading');
+        parcelHelpers.exportAll(_loading, exports);
+      },
+      {
+        './Landing': '8gD3a',
+        './Menu': 'lEQPh',
+        './Kitchen': 'l7054',
+        './Loading': '6M9JG',
+        '@parcel/transformer-js/src/esmodule-helpers.js': 'gkKU3',
+      },
+    ],
+    '8gD3a': [
+      function (require, module, exports) {
+        var $parcel$ReactRefreshHelpers$2521 = require('@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js');
+        var prevRefreshReg = window.$RefreshReg$;
+        var prevRefreshSig = window.$RefreshSig$;
+        $parcel$ReactRefreshHelpers$2521.prelude(module);
+
+        try {
+          var parcelHelpers = require('@parcel/transformer-js/src/esmodule-helpers.js');
+          parcelHelpers.defineInteropFlag(exports);
+          parcelHelpers.export(exports, 'LandingPage', () => LandingPage);
+          var _jsxDevRuntime = require('react/jsx-dev-runtime');
+          var _react = require('react');
+          var _reactDefault = parcelHelpers.interopDefault(_react);
+          const LandingPage = () => {
+            return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(
+              (0, _jsxDevRuntime.Fragment),
+              {
+                children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(
+                  'h1',
+                  {
+                    className: 'text-2xl font-bold underline text-blue-500',
+                    children: 'Hello world!',
+                  },
+                  void 0,
+                  false,
+                  {
+                    fileName: 'app/src/pages/Landing/index.tsx',
+                    lineNumber: 6,
+                    columnNumber: 7,
+                  },
+                  undefined
+                ),
+              },
+              void 0,
+              false
+            );
+          };
+          _c = LandingPage;
+          var _c;
+          $RefreshReg$(_c, 'LandingPage');
+
+          $parcel$ReactRefreshHelpers$2521.postlude(module);
+        } finally {
+          window.$RefreshReg$ = prevRefreshReg;
+          window.$RefreshSig$ = prevRefreshSig;
+        }
+      },
+      {
+        'react/jsx-dev-runtime': 'iTorj',
+        react: '21dqq',
+        '@parcel/transformer-js/src/esmodule-helpers.js': 'gkKU3',
+        '@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js':
+          'km3Ru',
+      },
+    ],
     lEQPh: [
       function (require, module, exports) {
         var $parcel$ReactRefreshHelpers$b234 = require('@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js');
@@ -46143,12 +46152,12 @@ ${frame.code}`;
           var _reactDefault = parcelHelpers.interopDefault(_react);
           var _reactRouterDom = require('react-router-dom');
           var _recoil = require('recoil');
-          var _catDropdown = require('src/components/Dropdowns/CatDropdown');
+          var _catDropdown = require('../../components/Dropdowns/CatDropdown');
           var _catDropdownDefault = parcelHelpers.interopDefault(_catDropdown);
-          var _menuCard = require('src/components/Card/MenuCard');
+          var _menuCard = require('../../components/Card/MenuCard');
           var _menuCardDefault = parcelHelpers.interopDefault(_menuCard);
-          var _cardModal = require('src/components/Modals/CardModal');
-          var _atoms = require('src/atoms');
+          var _cardModal = require('../../components/Modals/CardModal');
+          var _atoms = require('../../atoms');
           var _s = $RefreshSig$();
           const MenuPage = () => {
             _s();
@@ -46385,10 +46394,10 @@ ${frame.code}`;
         react: '21dqq',
         'react-router-dom': '9xmpe',
         recoil: 'gRxQh',
-        'src/components/Dropdowns/CatDropdown': 'jRet8',
-        'src/components/Card/MenuCard': '35XMz',
-        'src/components/Modals/CardModal': '5jBc5',
-        'src/atoms': 'aMryM',
+        '../../components/Dropdowns/CatDropdown': 'jRet8',
+        '../../components/Card/MenuCard': '35XMz',
+        '../../components/Modals/CardModal': '5jBc5',
+        '../../atoms': 'aMryM',
         '@parcel/transformer-js/src/esmodule-helpers.js': 'gkKU3',
         '@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js':
           'km3Ru',
@@ -54378,7 +54387,7 @@ into children's state keys as well.
           var _jsxDevRuntime = require('react/jsx-dev-runtime');
           var _react = require('react');
           var _reactDefault = parcelHelpers.interopDefault(_react);
-          var _categories = require('src/mocks/categories');
+          var _categories = require('../../mocks/categories');
           const CategoryDropdown = ({ onSetCategory }) => {
             const handleCloseDropDown = () => {
               const elem = document.activeElement;
@@ -54534,7 +54543,7 @@ into children's state keys as well.
       {
         'react/jsx-dev-runtime': 'iTorj',
         react: '21dqq',
-        'src/mocks/categories': 'gYT38',
+        '../../mocks/categories': 'gYT38',
         '@parcel/transformer-js/src/esmodule-helpers.js': 'gkKU3',
         '@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js':
           'km3Ru',
@@ -54570,8 +54579,8 @@ into children's state keys as well.
           var _jsxDevRuntime = require('react/jsx-dev-runtime');
           var _react = require('react');
           var _reactDefault = parcelHelpers.interopDefault(_react);
-          var _badge = require('src/components/Badge/Badge');
-          var _card = require('src/components/Card/Card');
+          var _badge = require('../../components/Badge/Badge');
+          var _card = require('../../components/Card/Card');
           const MenuCard = ({ name, image_url, category, price, onAdd }) => {
             return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(
               'div',
@@ -54664,8 +54673,8 @@ into children's state keys as well.
       {
         'react/jsx-dev-runtime': 'iTorj',
         react: '21dqq',
-        'src/components/Badge/Badge': '6ydiu',
-        'src/components/Card/Card': '2P2d7',
+        '../../components/Badge/Badge': '6ydiu',
+        '../../components/Card/Card': '2P2d7',
         '@parcel/transformer-js/src/esmodule-helpers.js': 'gkKU3',
         '@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js':
           'km3Ru',
@@ -54889,9 +54898,9 @@ into children's state keys as well.
           var _react = require('react');
           var _reactDefault = parcelHelpers.interopDefault(_react);
           var _recoil = require('recoil');
-          var _utils = require('src/utils');
-          var _atoms = require('src/atoms');
-          var _button = require('src/components/Button/Button');
+          var _utils = require('../../utils');
+          var _atoms = require('../../atoms');
+          var _button = require('../../components/Button/Button');
           var _badge = require('../Badge/Badge');
           var _s = $RefreshSig$();
           const getItem = (id, items) => items.find((item) => item.id === id);
@@ -55202,9 +55211,9 @@ into children's state keys as well.
         'react/jsx-dev-runtime': 'iTorj',
         react: '21dqq',
         recoil: 'gRxQh',
-        'src/utils': 'eCeaV',
-        'src/atoms': 'aMryM',
-        'src/components/Button/Button': '5spv9',
+        '../../utils': 'eCeaV',
+        '../../atoms': 'aMryM',
+        '../../components/Button/Button': '5spv9',
         '../Badge/Badge': '6ydiu',
         '@parcel/transformer-js/src/esmodule-helpers.js': 'gkKU3',
         '@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js':
@@ -55370,17 +55379,17 @@ into children's state keys as well.
           var _jsxDevRuntime = require('react/jsx-dev-runtime');
           var _react = require('react');
           var _reactDefault = parcelHelpers.interopDefault(_react);
-          var _navbar = require('src/components/Navigation/Navbar/Navbar');
-          var _kitchen = require('src/components/Icons/Kitchen');
-          var _kitchenRowModal = require('src/components/Modals/KitchenRowModal');
-          var _table = require('src/components/Table');
-          var _atoms = require('src/atoms');
-          var _seeds = require('src/seeds');
+          var _navbar = require('../../components/Navigation/Navbar/Navbar');
+          var _kitchen = require('../../components/Icons/Kitchen');
+          var _kitchenRowModal = require('../../components/Modals/KitchenRowModal');
+          var _table = require('../../components/Table');
+          var _atoms = require('../../atoms');
+          var _seeds = require('../../seeds');
           var _recoil = require('recoil');
-          var _deleteIcon = require('src/components/Icons/DeleteIcon');
-          var _classes = require('src/components/Badge/classes');
+          var _deleteIcon = require('../../components/Icons/DeleteIcon');
+          var _classes = require('../../components/Badge/classes');
           var _classesDefault = parcelHelpers.interopDefault(_classes);
-          var _badge = require('src/components/Badge/Badge');
+          var _badge = require('../../components/Badge/Badge');
           var _s = $RefreshSig$();
           const KitchenPage = () => {
             _s();
@@ -55610,16 +55619,16 @@ into children's state keys as well.
       {
         'react/jsx-dev-runtime': 'iTorj',
         react: '21dqq',
-        'src/components/Navigation/Navbar/Navbar': '7OD35',
-        'src/components/Icons/Kitchen': '4C3tK',
-        'src/components/Modals/KitchenRowModal': 'iUn4Z',
-        'src/components/Table': 'fxY8O',
-        'src/atoms': 'aMryM',
-        'src/seeds': '6b60K',
+        '../../components/Navigation/Navbar/Navbar': '7OD35',
+        '../../components/Icons/Kitchen': '4C3tK',
+        '../../components/Modals/KitchenRowModal': 'iUn4Z',
+        '../../components/Table': 'fxY8O',
+        '../../atoms': 'aMryM',
+        '../../seeds': '6b60K',
         recoil: 'gRxQh',
-        'src/components/Icons/DeleteIcon': '2ptvW',
-        'src/components/Badge/classes': '5qs46',
-        'src/components/Badge/Badge': '6ydiu',
+        '../../components/Icons/DeleteIcon': '2ptvW',
+        '../../components/Badge/classes': '5qs46',
+        '../../components/Badge/Badge': '6ydiu',
         '@parcel/transformer-js/src/esmodule-helpers.js': 'gkKU3',
         '@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js':
           'km3Ru',
@@ -55921,12 +55930,12 @@ into children's state keys as well.
           var _jsxDevRuntime = require('react/jsx-dev-runtime');
           var _react = require('react');
           var _reactDefault = parcelHelpers.interopDefault(_react);
-          var _button = require('src/components/Button/Button');
+          var _button = require('../../components/Button/Button');
           var _recoil = require('recoil');
-          var _atoms = require('src/atoms');
-          var _stat = require('src/components/Stat/Stat');
-          var _table = require('src/components/Table/Table');
-          var _tableRow = require('src/components/Table/TableRow');
+          var _atoms = require('../../atoms');
+          var _stat = require('../../components/Stat/Stat');
+          var _table = require('../../components/Table/Table');
+          var _tableRow = require('../../components/Table/TableRow');
           var _s = $RefreshSig$();
           const KitchenRowModal = ({ order_id, table, items, onClose }) => {
             _s();
@@ -56229,12 +56238,12 @@ into children's state keys as well.
       {
         'react/jsx-dev-runtime': 'iTorj',
         react: '21dqq',
-        'src/components/Button/Button': '5spv9',
+        '../../components/Button/Button': '5spv9',
         recoil: 'gRxQh',
-        'src/atoms': 'aMryM',
-        'src/components/Stat/Stat': 'eNuG4',
-        'src/components/Table/Table': '24vny',
-        'src/components/Table/TableRow': '2UcbD',
+        '../../atoms': 'aMryM',
+        '../../components/Stat/Stat': 'eNuG4',
+        '../../components/Table/Table': '24vny',
+        '../../components/Table/TableRow': '2UcbD',
         '@parcel/transformer-js/src/esmodule-helpers.js': 'gkKU3',
         '@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js':
           'km3Ru',
@@ -57048,7 +57057,7 @@ into children's state keys as well.
           var _jsxDevRuntime = require('react/jsx-dev-runtime');
           var _react = require('react');
           var _reactDefault = parcelHelpers.interopDefault(_react);
-          var _loading = require('src/components/Loading/Loading');
+          var _loading = require('../../components/Loading/Loading');
           const LoadingPhrases = [
             'Cooking up some good stuff...',
             'Loading...',
@@ -57138,7 +57147,7 @@ into children's state keys as well.
       {
         'react/jsx-dev-runtime': 'iTorj',
         react: '21dqq',
-        'src/components/Loading/Loading': 'bRkaa',
+        '../../components/Loading/Loading': 'bRkaa',
         '@parcel/transformer-js/src/esmodule-helpers.js': 'gkKU3',
         '@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js':
           'km3Ru',
