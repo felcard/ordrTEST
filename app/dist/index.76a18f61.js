@@ -45318,12 +45318,14 @@ ${frame.code}`;
           var _react = require('react');
           var _reactDefault = parcelHelpers.interopDefault(_react);
           var _reactRouterDom = require('react-router-dom');
-          var _pages = require('../pages');
+          var _ = require('../pages/Menu/');
+          var _1 = require('../pages/Loading/');
+          var _2 = require('../pages/Kitchen/');
           const router = (0, _reactRouterDom.createBrowserRouter)([
             {
               path: '/',
               element: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(
-                (0, _pages.LoadingPage),
+                (0, _1.LoadingPage),
                 {},
                 void 0,
                 false,
@@ -45338,7 +45340,7 @@ ${frame.code}`;
             {
               path: '/menu',
               element: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(
-                (0, _pages.MenuPage),
+                (0, _.MenuPage),
                 {},
                 void 0,
                 false,
@@ -45353,7 +45355,7 @@ ${frame.code}`;
             {
               path: '/kitchen',
               element: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(
-                (0, _pages.KitchenPage),
+                (0, _2.KitchenPage),
                 {},
                 void 0,
                 false,
@@ -45380,7 +45382,9 @@ ${frame.code}`;
         '@parcel/transformer-js/src/esmodule-helpers.js': 'gkKU3',
         '@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js':
           'km3Ru',
-        '../pages': '9mZX6',
+        '../pages/Menu/': 'lEQPh',
+        '../pages/Loading/': '6M9JG',
+        '../pages/Kitchen/': 'l7054',
       },
     ],
     km3Ru: [
@@ -46058,83 +46062,6 @@ ${frame.code}`;
         })();
       },
       {},
-    ],
-    '9mZX6': [
-      function (require, module, exports) {
-        var parcelHelpers = require('@parcel/transformer-js/src/esmodule-helpers.js');
-        parcelHelpers.defineInteropFlag(exports);
-        var _landing = require('./Landing');
-        parcelHelpers.exportAll(_landing, exports);
-        var _menu = require('./Menu');
-        parcelHelpers.exportAll(_menu, exports);
-        var _kitchen = require('./Kitchen');
-        parcelHelpers.exportAll(_kitchen, exports);
-        var _loading = require('./Loading');
-        parcelHelpers.exportAll(_loading, exports);
-      },
-      {
-        './Landing': '8gD3a',
-        './Menu': 'lEQPh',
-        './Kitchen': 'l7054',
-        './Loading': '6M9JG',
-        '@parcel/transformer-js/src/esmodule-helpers.js': 'gkKU3',
-      },
-    ],
-    '8gD3a': [
-      function (require, module, exports) {
-        var $parcel$ReactRefreshHelpers$2521 = require('@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js');
-        var prevRefreshReg = window.$RefreshReg$;
-        var prevRefreshSig = window.$RefreshSig$;
-        $parcel$ReactRefreshHelpers$2521.prelude(module);
-
-        try {
-          var parcelHelpers = require('@parcel/transformer-js/src/esmodule-helpers.js');
-          parcelHelpers.defineInteropFlag(exports);
-          parcelHelpers.export(exports, 'LandingPage', () => LandingPage);
-          var _jsxDevRuntime = require('react/jsx-dev-runtime');
-          var _react = require('react');
-          var _reactDefault = parcelHelpers.interopDefault(_react);
-          const LandingPage = () => {
-            return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(
-              (0, _jsxDevRuntime.Fragment),
-              {
-                children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(
-                  'h1',
-                  {
-                    className: 'text-2xl font-bold underline text-blue-500',
-                    children: 'Hello world!',
-                  },
-                  void 0,
-                  false,
-                  {
-                    fileName: 'app/src/pages/Landing/index.tsx',
-                    lineNumber: 6,
-                    columnNumber: 7,
-                  },
-                  undefined
-                ),
-              },
-              void 0,
-              false
-            );
-          };
-          _c = LandingPage;
-          var _c;
-          $RefreshReg$(_c, 'LandingPage');
-
-          $parcel$ReactRefreshHelpers$2521.postlude(module);
-        } finally {
-          window.$RefreshReg$ = prevRefreshReg;
-          window.$RefreshSig$ = prevRefreshSig;
-        }
-      },
-      {
-        'react/jsx-dev-runtime': 'iTorj',
-        react: '21dqq',
-        '@parcel/transformer-js/src/esmodule-helpers.js': 'gkKU3',
-        '@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js':
-          'km3Ru',
-      },
     ],
     lEQPh: [
       function (require, module, exports) {
@@ -55365,6 +55292,197 @@ into children's state keys as well.
       },
       { '@parcel/transformer-js/src/esmodule-helpers.js': 'gkKU3' },
     ],
+    '6M9JG': [
+      function (require, module, exports) {
+        var $parcel$ReactRefreshHelpers$d851 = require('@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js');
+        var prevRefreshReg = window.$RefreshReg$;
+        var prevRefreshSig = window.$RefreshSig$;
+        $parcel$ReactRefreshHelpers$d851.prelude(module);
+
+        try {
+          var parcelHelpers = require('@parcel/transformer-js/src/esmodule-helpers.js');
+          parcelHelpers.defineInteropFlag(exports);
+          parcelHelpers.export(exports, 'LoadingPage', () => LoadingPage);
+          var _jsxDevRuntime = require('react/jsx-dev-runtime');
+          var _react = require('react');
+          var _reactDefault = parcelHelpers.interopDefault(_react);
+          var _loading = require('../../components/Loading/Loading');
+          const LoadingPhrases = [
+            'Cooking up some good stuff...',
+            'Loading...',
+            'Just a sec...',
+            'Hold on tight...',
+            "We're almost there...",
+            'Just a little bit more...',
+            "We're getting there...",
+            "We're almost done...",
+            'Cooking up a storm...',
+          ];
+          const getRandomPhrase = () =>
+            LoadingPhrases[Math.floor(Math.random() * LoadingPhrases.length)];
+          const LoadingPage = () => {
+            return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(
+              'div',
+              {
+                className: 'h-screen w-screen flex justify-center',
+                children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(
+                  'div',
+                  {
+                    className:
+                      'flex flex-col items-center justify-center gap-4',
+                    children: [
+                      /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(
+                        'div',
+                        {
+                          className: 'text-3xl font-bold text-center',
+                          children: getRandomPhrase(),
+                        },
+                        void 0,
+                        false,
+                        {
+                          fileName: 'app/src/pages/Loading/index.tsx',
+                          lineNumber: 23,
+                          columnNumber: 9,
+                        },
+                        undefined
+                      ),
+                      /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(
+                        (0, _loading.Loading),
+                        {
+                          size: 'lg',
+                          color: 'primary',
+                        },
+                        void 0,
+                        false,
+                        {
+                          fileName: 'app/src/pages/Loading/index.tsx',
+                          lineNumber: 26,
+                          columnNumber: 9,
+                        },
+                        undefined
+                      ),
+                    ],
+                  },
+                  void 0,
+                  true,
+                  {
+                    fileName: 'app/src/pages/Loading/index.tsx',
+                    lineNumber: 22,
+                    columnNumber: 7,
+                  },
+                  undefined
+                ),
+              },
+              void 0,
+              false,
+              {
+                fileName: 'app/src/pages/Loading/index.tsx',
+                lineNumber: 21,
+                columnNumber: 5,
+              },
+              undefined
+            );
+          };
+          _c = LoadingPage;
+          var _c;
+          $RefreshReg$(_c, 'LoadingPage');
+
+          $parcel$ReactRefreshHelpers$d851.postlude(module);
+        } finally {
+          window.$RefreshReg$ = prevRefreshReg;
+          window.$RefreshSig$ = prevRefreshSig;
+        }
+      },
+      {
+        'react/jsx-dev-runtime': 'iTorj',
+        react: '21dqq',
+        '../../components/Loading/Loading': 'bRkaa',
+        '@parcel/transformer-js/src/esmodule-helpers.js': 'gkKU3',
+        '@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js':
+          'km3Ru',
+      },
+    ],
+    bRkaa: [
+      function (require, module, exports) {
+        var $parcel$ReactRefreshHelpers$5f61 = require('@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js');
+        var prevRefreshReg = window.$RefreshReg$;
+        var prevRefreshSig = window.$RefreshSig$;
+        $parcel$ReactRefreshHelpers$5f61.prelude(module);
+
+        try {
+          var parcelHelpers = require('@parcel/transformer-js/src/esmodule-helpers.js');
+          parcelHelpers.defineInteropFlag(exports);
+          parcelHelpers.export(exports, 'Loading', () => Loading);
+          var _jsxDevRuntime = require('react/jsx-dev-runtime');
+          var _react = require('react');
+          var _reactDefault = parcelHelpers.interopDefault(_react);
+          var _classes = require('./classes');
+          const Loading = ({ size = 'md', color = 'light' }) => {
+            return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(
+              'span',
+              {
+                className: `loading loading-spinner ${
+                  (0, _classes.classes).size[size]
+                } ${(0, _classes.classes).color[color]}`,
+              },
+              void 0,
+              false,
+              {
+                fileName: 'app/src/components/Loading/Loading.tsx',
+                lineNumber: 7,
+                columnNumber: 5,
+              },
+              undefined
+            );
+          };
+          _c = Loading;
+          var _c;
+          $RefreshReg$(_c, 'Loading');
+
+          $parcel$ReactRefreshHelpers$5f61.postlude(module);
+        } finally {
+          window.$RefreshReg$ = prevRefreshReg;
+          window.$RefreshSig$ = prevRefreshSig;
+        }
+      },
+      {
+        'react/jsx-dev-runtime': 'iTorj',
+        react: '21dqq',
+        './classes': 'kTCPZ',
+        '@parcel/transformer-js/src/esmodule-helpers.js': 'gkKU3',
+        '@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js':
+          'km3Ru',
+      },
+    ],
+    kTCPZ: [
+      function (require, module, exports) {
+        var parcelHelpers = require('@parcel/transformer-js/src/esmodule-helpers.js');
+        parcelHelpers.defineInteropFlag(exports);
+        parcelHelpers.export(exports, 'classes', () => classes);
+        const classes = {
+          color: {
+            primary: 'text-primary',
+            secondary: 'text-secondary',
+            success: 'text-success',
+            danger: 'text-danger',
+            warning: 'text-warning',
+            info: 'text-info',
+            light: 'text-light',
+            dark: 'text-dark',
+            link: 'text-link',
+            accent: 'text-accent',
+            neutral: 'text-neutral',
+          },
+          size: {
+            xs: 'loading-xs',
+            sm: 'loading-sm',
+            md: 'loading-md',
+            lg: 'loading-lg',
+          },
+        };
+      },
+      { '@parcel/transformer-js/src/esmodule-helpers.js': 'gkKU3' },
+    ],
     l7054: [
       function (require, module, exports) {
         var $parcel$ReactRefreshHelpers$f061 = require('@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js');
@@ -57042,197 +57160,6 @@ into children's state keys as well.
         '@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js':
           'km3Ru',
       },
-    ],
-    '6M9JG': [
-      function (require, module, exports) {
-        var $parcel$ReactRefreshHelpers$d851 = require('@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js');
-        var prevRefreshReg = window.$RefreshReg$;
-        var prevRefreshSig = window.$RefreshSig$;
-        $parcel$ReactRefreshHelpers$d851.prelude(module);
-
-        try {
-          var parcelHelpers = require('@parcel/transformer-js/src/esmodule-helpers.js');
-          parcelHelpers.defineInteropFlag(exports);
-          parcelHelpers.export(exports, 'LoadingPage', () => LoadingPage);
-          var _jsxDevRuntime = require('react/jsx-dev-runtime');
-          var _react = require('react');
-          var _reactDefault = parcelHelpers.interopDefault(_react);
-          var _loading = require('../../components/Loading/Loading');
-          const LoadingPhrases = [
-            'Cooking up some good stuff...',
-            'Loading...',
-            'Just a sec...',
-            'Hold on tight...',
-            "We're almost there...",
-            'Just a little bit more...',
-            "We're getting there...",
-            "We're almost done...",
-            'Cooking up a storm...',
-          ];
-          const getRandomPhrase = () =>
-            LoadingPhrases[Math.floor(Math.random() * LoadingPhrases.length)];
-          const LoadingPage = () => {
-            return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(
-              'div',
-              {
-                className: 'h-screen w-screen flex justify-center',
-                children: /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(
-                  'div',
-                  {
-                    className:
-                      'flex flex-col items-center justify-center gap-4',
-                    children: [
-                      /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(
-                        'div',
-                        {
-                          className: 'text-3xl font-bold text-center',
-                          children: getRandomPhrase(),
-                        },
-                        void 0,
-                        false,
-                        {
-                          fileName: 'app/src/pages/Loading/index.tsx',
-                          lineNumber: 23,
-                          columnNumber: 9,
-                        },
-                        undefined
-                      ),
-                      /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(
-                        (0, _loading.Loading),
-                        {
-                          size: 'lg',
-                          color: 'primary',
-                        },
-                        void 0,
-                        false,
-                        {
-                          fileName: 'app/src/pages/Loading/index.tsx',
-                          lineNumber: 26,
-                          columnNumber: 9,
-                        },
-                        undefined
-                      ),
-                    ],
-                  },
-                  void 0,
-                  true,
-                  {
-                    fileName: 'app/src/pages/Loading/index.tsx',
-                    lineNumber: 22,
-                    columnNumber: 7,
-                  },
-                  undefined
-                ),
-              },
-              void 0,
-              false,
-              {
-                fileName: 'app/src/pages/Loading/index.tsx',
-                lineNumber: 21,
-                columnNumber: 5,
-              },
-              undefined
-            );
-          };
-          _c = LoadingPage;
-          var _c;
-          $RefreshReg$(_c, 'LoadingPage');
-
-          $parcel$ReactRefreshHelpers$d851.postlude(module);
-        } finally {
-          window.$RefreshReg$ = prevRefreshReg;
-          window.$RefreshSig$ = prevRefreshSig;
-        }
-      },
-      {
-        'react/jsx-dev-runtime': 'iTorj',
-        react: '21dqq',
-        '../../components/Loading/Loading': 'bRkaa',
-        '@parcel/transformer-js/src/esmodule-helpers.js': 'gkKU3',
-        '@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js':
-          'km3Ru',
-      },
-    ],
-    bRkaa: [
-      function (require, module, exports) {
-        var $parcel$ReactRefreshHelpers$5f61 = require('@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js');
-        var prevRefreshReg = window.$RefreshReg$;
-        var prevRefreshSig = window.$RefreshSig$;
-        $parcel$ReactRefreshHelpers$5f61.prelude(module);
-
-        try {
-          var parcelHelpers = require('@parcel/transformer-js/src/esmodule-helpers.js');
-          parcelHelpers.defineInteropFlag(exports);
-          parcelHelpers.export(exports, 'Loading', () => Loading);
-          var _jsxDevRuntime = require('react/jsx-dev-runtime');
-          var _react = require('react');
-          var _reactDefault = parcelHelpers.interopDefault(_react);
-          var _classes = require('./classes');
-          const Loading = ({ size = 'md', color = 'light' }) => {
-            return /*#__PURE__*/ (0, _jsxDevRuntime.jsxDEV)(
-              'span',
-              {
-                className: `loading loading-spinner ${
-                  (0, _classes.classes).size[size]
-                } ${(0, _classes.classes).color[color]}`,
-              },
-              void 0,
-              false,
-              {
-                fileName: 'app/src/components/Loading/Loading.tsx',
-                lineNumber: 7,
-                columnNumber: 5,
-              },
-              undefined
-            );
-          };
-          _c = Loading;
-          var _c;
-          $RefreshReg$(_c, 'Loading');
-
-          $parcel$ReactRefreshHelpers$5f61.postlude(module);
-        } finally {
-          window.$RefreshReg$ = prevRefreshReg;
-          window.$RefreshSig$ = prevRefreshSig;
-        }
-      },
-      {
-        'react/jsx-dev-runtime': 'iTorj',
-        react: '21dqq',
-        './classes': 'kTCPZ',
-        '@parcel/transformer-js/src/esmodule-helpers.js': 'gkKU3',
-        '@parcel/transformer-react-refresh-wrap/lib/helpers/helpers.js':
-          'km3Ru',
-      },
-    ],
-    kTCPZ: [
-      function (require, module, exports) {
-        var parcelHelpers = require('@parcel/transformer-js/src/esmodule-helpers.js');
-        parcelHelpers.defineInteropFlag(exports);
-        parcelHelpers.export(exports, 'classes', () => classes);
-        const classes = {
-          color: {
-            primary: 'text-primary',
-            secondary: 'text-secondary',
-            success: 'text-success',
-            danger: 'text-danger',
-            warning: 'text-warning',
-            info: 'text-info',
-            light: 'text-light',
-            dark: 'text-dark',
-            link: 'text-link',
-            accent: 'text-accent',
-            neutral: 'text-neutral',
-          },
-          size: {
-            xs: 'loading-xs',
-            sm: 'loading-sm',
-            md: 'loading-md',
-            lg: 'loading-lg',
-          },
-        };
-      },
-      { '@parcel/transformer-js/src/esmodule-helpers.js': 'gkKU3' },
     ],
   },
   ['lk5Gg', '1xC6H', '50ykp'],
