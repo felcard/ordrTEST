@@ -1,16 +1,16 @@
 import React from 'react';
-import { Navbar } from 'src/components/Navigation/Navbar/Navbar';
-import { Kitchen } from 'src/components/Icons/Kitchen';
-import { KitchenRowModal } from 'src/components/Modals/KitchenRowModal';
-import { Table } from 'src/components/Table';
-import { TableRow } from 'src/components/Table';
-import { ordersState, Order, OrderItem } from 'src/atoms';
-import { orders } from 'src/seeds';
+import { Navbar } from '../../components/Navigation/Navbar/Navbar';
+import { Kitchen } from '../../components/Icons/Kitchen';
+import { KitchenRowModal } from '../../components/Modals/KitchenRowModal';
+import { Table } from '../../components/Table';
+import { TableRow } from '../../components/Table';
+import { ordersState, Order, OrderItem } from '../../atoms';
+import { orders } from '../../seeds';
 import { useRecoilState } from 'recoil';
 import { useState, useEffect } from 'react';
-import { DeleteIcon } from 'src/components/Icons/DeleteIcon';
-import classes from 'src/components/Badge/classes';
-import { Badge } from 'src/components/Badge/Badge';
+import { DeleteIcon } from '../../components/Icons/DeleteIcon';
+import classes from '../../components/Badge/classes';
+import { Badge } from '../../components/Badge/Badge';
 
 export const KitchenPage = (): JSX.Element => {
   const [restaurantOrders, setRestaurantOrders] = useRecoilState(ordersState);

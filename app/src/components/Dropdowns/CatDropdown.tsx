@@ -1,5 +1,5 @@
 import React from 'react';
-import { categories } from 'src/mocks/categories';
+import { categories } from '../../mocks/categories';
 
 interface CategoryDropdownProps {
   onSetCategory: (category: (typeof categories)[number]) => void;

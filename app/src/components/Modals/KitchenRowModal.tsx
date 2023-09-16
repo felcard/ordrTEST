@@ -1,10 +1,10 @@
 import React from 'react';
-import { Button } from 'src/components/Button/Button';
+import { Button } from '../../components/Button/Button';
 import { useRecoilState } from 'recoil';
-import { ordersState } from 'src/atoms';
-import { Stat } from 'src/components/Stat/Stat';
-import { Table } from 'src/components/Table/Table';
-import { TableRow } from 'src/components/Table/TableRow';
+import { ordersState } from '../../atoms';
+import { Stat } from '../../components/Stat/Stat';
+import { Table } from '../../components/Table/Table';
+import { TableRow } from '../../components/Table/TableRow';
 
 type OrderItem = {
   name: string;

@@ -1,7 +1,7 @@
 import { Category } from '@ordr/types';
 import React from 'react';
-import { Badge } from 'src/components/Badge/Badge';
-import { Card } from 'src/components/Card/Card';
+import { Badge } from '../../components/Badge/Badge';
+import { Card } from '../../components/Card/Card';
 
 interface MenuCardProps {
   item_id: string;

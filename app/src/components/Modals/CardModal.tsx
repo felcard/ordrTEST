@@ -5,9 +5,9 @@ import {
   findArrayIndex,
   replaceItemAtIndex,
   removeItemAtIndex,
-} from 'src/utils';
-import { BasketItem, basketState } from 'src/atoms';
-import { Button } from 'src/components/Button/Button';
+} from '../../utils';
+import { BasketItem, basketState } from '../../atoms';
+import { Button } from '../../components/Button/Button';
 import { Badge } from '../Badge/Badge';
 import { Category } from '@ordr/types';
 

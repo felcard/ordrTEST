@@ -1,8 +1,8 @@
 import React from 'react';
 import { createBrowserRouter } from 'react-router-dom';
-import { MenuPage } from 'src/pages';
-import { LoadingPage } from 'src/pages';
-import { KitchenPage } from 'src/pages';
+import { MenuPage } from '../pages';
+import { LoadingPage } from '../pages';
+import { KitchenPage } from '../pages';
 
 export const router = createBrowserRouter([
   {
