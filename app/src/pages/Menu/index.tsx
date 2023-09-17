@@ -14,7 +14,7 @@ export const MenuPage = (): JSX.Element => {
   const basket = useRecoilValue(basketState);
 
   const fetchMenu = async () => {
-    const res = await fetch('http://localhost:2023/api/menu-items');
+    const res = await fetch('https://ordr-test.onrender.com/api/menu-items');
     const json = await res.json();
     return json;
   };
